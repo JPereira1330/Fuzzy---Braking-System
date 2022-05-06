@@ -3,8 +3,10 @@
 Resolvendo problema de freagem de carro usando a logica difusa (Fuzzy)
 
 ## Grupo
-José C. Pereira
-Gabriel L. Weber
+
+ - José C. Pereira (https://github.com/JPereira1330)
+
+ - Gabriel L. Weber (https://github.com/gabriellopesweber)
 
 ## **Referencias:**
 
