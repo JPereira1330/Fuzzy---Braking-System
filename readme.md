@@ -2,6 +2,12 @@
 
 Resolvendo problema de frenagem de carro usando a logica difusa (Fuzzy)
 
+## Como usar:
+
+Para executar o programa e calcular frenagem a 120km/h a 95.6 metros
+
+> Ex: python3 fuzzy_bs.py 120 95.6
+
 ## Grupo:
 
  - José C. Pereira (https://github.com/JPereira1330)

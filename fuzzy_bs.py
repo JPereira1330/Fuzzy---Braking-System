@@ -1,3 +1,4 @@
+from sre_constants import SUCCESS
 import sys
 import math
 import numpy as np
@@ -5,9 +6,17 @@ import skfuzzy as fuzzy
 from skfuzzy import control
 import matplotlib.pyplot as plt
 
-def print_result(msg:str, turno:int, speed:float, distance:float):
+def print_Green(skk): print("\033[92m {}\033[00m" .format(skk))
+def print_Red(skk): print("\033[91m {}\033[00m" .format(skk))
+
+def print_result(msg:bool, turno:int, speed:float, distance:float):
     print(f" ")
-    print(f" {msg} ")
+    
+    if msg:
+        print_Green(f" SUCESSO AO FREAR ")
+    else:
+        print_Red(f" CARRO COLIDIU :/ ")
+
     print(f" - Velocidade final: {speed} km/h")
     print(f" - Distancia final: {distance} m")
     print(f" - Tempo final: {turno} s")
@@ -15,19 +24,19 @@ def print_result(msg:str, turno:int, speed:float, distance:float):
 def verifica_final(turno:int, speed:float, distance:float):
 
     if turno >= 50:
-        print_result("FALHA", turno, speed, distance)
+        print_result(False, turno, speed, distance)
         return True
 
     if distance == 0.0:
-        print_result("SUCESSO", turno, speed, distance)
+        print_result(True, turno, speed, distance)
         return True
 
     if distance < 0.0:
-        print_result("FALHA", turno, speed, distance)
+        print_result(False, turno, speed, distance)
         return True
 
     if speed == 0:
-        print_result("SUCESSO", turno, speed, distance)
+        print_result(True, turno, speed, distance)
         return True
 
     return False
@@ -130,7 +139,7 @@ def calc_controller(turno:int, speed:float, distance:float):
     dif_freio = calc_fuzzy(speed, distance)
 
     # Calculando velocidade
-    speed_ms = speed_ms - (dif_freio/100 * 6.25)   # 6 é a representacao dos outros atritos
+    speed_ms = speed_ms - (dif_freio/100 * 6.25)   # 6.25 é a representacao dos outros atritos
     if speed_ms <= 0:
         speed_ms = 0
 
@@ -141,7 +150,7 @@ def calc_controller(turno:int, speed:float, distance:float):
     speed = speed_ms * 3.6         # Convertendo ms para KM
 
     turno = turno + 1
-    print(f"[CALC] Turno: {turno} | Velocidade: {math.trunc(speed)} | Distancia: {math.trunc(distance)} | Pressao Freio: {math.trunc(dif_freio)}")
+    print(f"[CALC] Turno: {turno} | Velocidade: {speed:.3f} | Distancia: {distance:.3f} | Pressao Freio: {dif_freio:.3f}")
     return calc_controller(turno, speed, distance)
 
 def main():
