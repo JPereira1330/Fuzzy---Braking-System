@@ -2,13 +2,25 @@
 
 Resolvendo problema de freagem de carro usando a logica difusa (Fuzzy)
 
-## Grupo
+## Grupo:
 
  - José C. Pereira (https://github.com/JPereira1330)
 
  - Gabriel L. Weber (https://github.com/gabriellopesweber)
 
-## **Referencias:**
+## Requisitos:
+
+ Instalação do gerenciador de pacotes do python:
+ > sudo apt install python3-pip
+
+ Instalando dependencias:
+ > pip3 install -U numpy
+
+ > pip3 install -U scikit-fuzzy
+
+ > pip3 insatll -u matplotlib
+
+## Referencias:
 
 **Codigo base utilizado:**
 
