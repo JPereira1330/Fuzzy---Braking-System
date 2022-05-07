@@ -1,6 +1,6 @@
 # Fuzzy - Braking System
 
-Resolvendo problema de freagem de carro usando a logica difusa (Fuzzy)
+Resolvendo problema de frenagem de carro usando a logica difusa (Fuzzy)
 
 ## Grupo:
 
