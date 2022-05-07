@@ -5,20 +5,29 @@ import skfuzzy as fuzzy
 from skfuzzy import control
 import matplotlib.pyplot as plt
 
-last_distance = None
+def print_result(msg:str, turno:int, speed:float, distance:float):
+    print(f" ")
+    print(f" {msg} ")
+    print(f" - Velocidade final: {speed} km/h")
+    print(f" - Distancia final: {distance} m")
+    print(f" - Tempo final: {turno} s")
 
 def verifica_final(turno:int, speed:float, distance:float):
 
-    if turno >= 10:
-        print(F"[FAIL] Quantia de turnos excedidas")
+    if turno >= 50:
+        print_result("FALHA", turno, speed, distance)
         return True
 
-    if float(distance) == 0.0:
-        print(F"[SUCC] Turno: {turno} | Velocidade: {speed} | Distancia: {distance}")
+    if distance == 0.0:
+        print_result("SUCESSO", turno, speed, distance)
         return True
 
-    if float(distance) < 0.0:
-        print(F"[FAIL] Turno: {turno} | Velocidade: {speed} | Distancia: {distance}")
+    if distance < 0.0:
+        print_result("FALHA", turno, speed, distance)
+        return True
+
+    if speed == 0:
+        print_result("SUCESSO", turno, speed, distance)
         return True
 
     return False
@@ -113,25 +122,26 @@ def calc_controller(turno:int, speed:float, distance:float):
     if verifica_final(turno, speed, distance):
         return True
 
-    # Calculando
-    dif_freio = calc_fuzzy(speed, distance)
-    
+    # Convertendo
     tempo = 1                   # Tempo fixo em 1 segundo
-    speed_tmp = speed / 3.6     # Convertendo KM para ms
+    speed_ms = speed / 3.6      # Convertendo KM para ms
 
-    if not last_distance:
-        last_distance = 0
+    # Calculando pressao do freio
+    dif_freio = calc_fuzzy(speed, distance)
 
-    print(f"{last_distance}")
-    distance = last_distance + speed_tmp*tempo + ((10/2) * (tempo*tempo))
-    last_distance = distance
-    #distance = distance + speed_tmp*tempo + ((10/2) * (tempo*tempo))
+    # Calculando velocidade
+    speed_ms = speed_ms - (dif_freio/100 * 6.25)   # 6 é a representacao dos outros atritos
+    if speed_ms <= 0:
+        speed_ms = 0
 
-    speed = speed_tmp - (dif_freio/100)
-    speed = speed * 3.6         # Convertendo ms para KM
+    # Calculando distancia
+    distance = distance - speed_ms
 
-    print(f"[CALC] Turno: {turno} | Velocidade: {math.trunc(speed)} | Distancia: {math.trunc(distance)} | Pressao Freio: {math.trunc(dif_freio)}")
+    # Convertendo
+    speed = speed_ms * 3.6         # Convertendo ms para KM
+
     turno = turno + 1
+    print(f"[CALC] Turno: {turno} | Velocidade: {math.trunc(speed)} | Distancia: {math.trunc(distance)} | Pressao Freio: {math.trunc(dif_freio)}")
     return calc_controller(turno, speed, distance)
 
 def main():
@@ -145,7 +155,7 @@ def main():
     speed = float(sys.argv[1])         # velocidade em Km/h
     distance = float(sys.argv[2])      # distancia ate parar
 
-    print(f"[CALC] Turno: 0 | Velocidade: {speed} | Distancia: {distance}")
+    print(f"[CALC] Turno: 0 | Velocidade: {math.trunc(speed)} | Distancia: {math.trunc(distance)}")
     return calc_controller(0, speed, distance)
 
 main()
