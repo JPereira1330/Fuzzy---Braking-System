@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 def print_Green(skk): print("\033[92m {}\033[00m" .format(skk))
 def print_Red(skk): print("\033[91m {}\033[00m" .format(skk))
 
-def print_pista(tempo:int, speed:int, distance:int, distance_total:int):
+def print_pista(tempo:int, speed:int, distance:int, distance_total:int, dist_freio:float):
     count = -1
     
     emoji = '🚗'
@@ -37,15 +37,15 @@ def print_pista(tempo:int, speed:int, distance:int, distance_total:int):
 
         print("\033[91m‗\033[00m",end="")
 
-    print("")
+    print(f" | P Freio {dist_freio:.3f}")
 
 def print_result(msg:bool, turno:int, speed:float, distance:float):
     print(f" ")
 
     if msg:
-        print_Green(f" SUCESSO AO FREAR ")
+        print_Green(f" \t SUCESSO AO FREAR ")
     else:
-        print_Red(f" CARRO COLIDIU :/ ")
+        print_Red(f" \t CARRO COLIDIU :/ ")
 
     print(f" - Velocidade final: {speed} km/h")
     print(f" - Distancia final: {distance} m")
@@ -182,7 +182,7 @@ def calc_controller(turno:int, speed:float, distance:float):
 
     turno = turno + 1
     #print(f"[CALC] Turno: {turno} | Velocidade: {speed:.3f} | Distancia: {distance:.3f} | Pressao Freio: {dif_freio:.3f}")
-    print_pista(turno, speed, distance, 100)
+    print_pista(turno, speed, distance, 100, dif_freio)
     return calc_controller(turno, speed, distance)
 
 def main():
