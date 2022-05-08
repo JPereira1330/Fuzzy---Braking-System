@@ -1,4 +1,3 @@
-from sre_constants import SUCCESS
 import sys
 import math
 import numpy as np
@@ -9,9 +8,40 @@ import matplotlib.pyplot as plt
 def print_Green(skk): print("\033[92m {}\033[00m" .format(skk))
 def print_Red(skk): print("\033[91m {}\033[00m" .format(skk))
 
+def print_pista(tempo:int, speed:int, distance:int, distance_total:int):
+    count = -1
+    
+    emoji = '🚗'
+    if distance <= 0:
+        emoji = '🪦'
+        distance = 1
+
+    speed = round(speed)
+    distance = round(distance)
+
+    print(f"{tempo}s | {distance}m | {speed}km/s \t ",end="")
+    while count < distance_total:
+        count = count + 1
+        
+        if count == 0:
+            print("🚧",end="")
+            continue
+
+        if count < distance:
+            print("\033[92m‗\033[00m",end="")
+            continue
+
+        if count == distance:
+            print(f"{emoji}",end="")
+            continue
+
+        print("\033[91m‗\033[00m",end="")
+
+    print("")
+
 def print_result(msg:bool, turno:int, speed:float, distance:float):
     print(f" ")
-    
+
     if msg:
         print_Green(f" SUCESSO AO FREAR ")
     else:
@@ -19,7 +49,8 @@ def print_result(msg:bool, turno:int, speed:float, distance:float):
 
     print(f" - Velocidade final: {speed} km/h")
     print(f" - Distancia final: {distance} m")
-    print(f" - Tempo final: {turno} s")
+    print(f" - Tempo final: {turno} s \n")
+    return True
 
 def verifica_final(turno:int, speed:float, distance:float):
 
@@ -150,7 +181,8 @@ def calc_controller(turno:int, speed:float, distance:float):
     speed = speed_ms * 3.6         # Convertendo ms para KM
 
     turno = turno + 1
-    print(f"[CALC] Turno: {turno} | Velocidade: {speed:.3f} | Distancia: {distance:.3f} | Pressao Freio: {dif_freio:.3f}")
+    #print(f"[CALC] Turno: {turno} | Velocidade: {speed:.3f} | Distancia: {distance:.3f} | Pressao Freio: {dif_freio:.3f}")
+    print_pista(turno, speed, distance, 100)
     return calc_controller(turno, speed, distance)
 
 def main():
@@ -164,7 +196,6 @@ def main():
     speed = float(sys.argv[1])         # velocidade em Km/h
     distance = float(sys.argv[2])      # distancia ate parar
 
-    print(f"[CALC] Turno: 0 | Velocidade: {math.trunc(speed)} | Distancia: {math.trunc(distance)}")
     return calc_controller(0, speed, distance)
 
 main()
